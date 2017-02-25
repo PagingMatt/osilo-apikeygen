@@ -32,7 +32,8 @@ let generate_api_key ~service ~cert ~key =
   let private_key = rsa_private_key key   in
   let certificate = x509_certificate cert in
   let hs = X509.hostnames certificate     in
-  Pss.sign ~key:private_key (hostname hs |> Cstruct.of_string)
+  Pss.sign ~key:private_key
+    (Printf.sprintf "%s/%s" (hostname hs) service |> Cstruct.of_string)
   |> Nocrypto.Base64.encode
   |> Cstruct.to_string
 
