@@ -1,5 +1,24 @@
 open Core.Std
 
+let read_file_to_cstruct ~f =
+  let open Unix in
+  let buf  = String.make 65536 'x' in
+  let file = Unix.openfile ~mode:[O_RDONLY] f in file
+  |> Unix.read ~buf
+  |> (fun l -> (Unix.close file); String.prefix buf l)
+  |> Cstruct.of_string
+
+let rsa_private_key ~key =
+  read_file_to_cstruct key
+  |> X509.Encoding.Pem.Private_key.of_pem_cstruct1
+  |> begin function
+    | `RSA prv -> prv
+  end
+
+let cert ~cert =
+  read_file_to_cstruct cert
+  |> X509.Encoding.Pem.Certificate.of_pem_cstruct1
+
 let generate_api_key ~service ~cert ~key = ()
 
 let gen =
