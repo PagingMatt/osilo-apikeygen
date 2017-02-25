@@ -1,4 +1,5 @@
 open Core.Std
+open Nocrypto
 
 let read_file_to_cstruct ~f =
   let open Unix in
@@ -24,7 +25,7 @@ let hostname hs =
   | h::[] -> h
   | _     -> assert false
 
-module Pss = Nocrypto.Rsa.PSS (Nocrypto.Hash.SHA512)
+module Pss = Rsa.PSS (Nocrypto.Hash.SHA512)
 
 let generate_api_key ~service ~cert ~key =
   let open Nocrypto in
@@ -47,7 +48,8 @@ let gen =
       +> flag "-k" (required string)
         ~doc:"  Path to peer's private key file."
     ) (fun s c k () ->
-        generate_api_key ~service:s ~cert:c ~key:k
+        Nocrypto_entropy_unix.initialize ()
+        |> fun () -> generate_api_key ~service:s ~cert:c ~key:k
         |> Printf.printf "%s")
 
 let commands =
