@@ -16,6 +16,7 @@ depends: [
   "nocrypto"
   "ocamlfind" {build}
   "ocamlbuild" {build}
+  "osilo"
   "x509"
 ]
 available: [ocaml-version >= "4.02.3"]

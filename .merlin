@@ -6,4 +6,5 @@ B +threads
 PKG core
 PKG cstruct
 PKG nocrypto.unix
+PKG osilo
 PKG x509
