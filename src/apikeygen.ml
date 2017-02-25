@@ -1,5 +1,4 @@
 open Core.Std
-open Osilo.Cryptography
 
 let read_file_to_cstruct ~f =
   let open Unix in
@@ -25,14 +24,16 @@ let hostname hs =
   | h::[] -> h
   | _     -> assert false
 
+module Pss = Nocrypto.Rsa.PSS (Nocrypto.Hash.SHA512)
+
 let generate_api_key ~service ~cert ~key =
   let open Nocrypto in
   let private_key = rsa_private_key key   in
   let certificate = x509_certificate cert in
   let hs = X509.hostnames certificate     in
-  Signing.sign ~key:private_key (hostname hs |> Cstruct.of_string)
-  |> Serialisation.serialise_cstruct
-  |> Printf.printf "%s" 
+  Pss.sign ~key:private_key (hostname hs |> Cstruct.of_string)
+  |> Nocrypto.Base64.encode
+  |> Cstruct.to_string
 
 let gen =
   Command.basic
@@ -45,7 +46,9 @@ let gen =
         ~doc:"  Path to peer's x509 certificate."
       +> flag "-k" (required string)
         ~doc:"  Path to peer's private key file."
-    ) (fun s c k () -> generate_api_key ~service:s ~cert:c ~key:k)
+    ) (fun s c k () ->
+        generate_api_key ~service:s ~cert:c ~key:k
+        |> Printf.printf "%s")
 
 let commands =
   Command.group

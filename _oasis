@@ -15,5 +15,5 @@ Executable osilo-apikeygen
   Path: src
   MainIs: apikeygen.ml
   CompiledObject: best
-  BuildDepends: core, cstruct, nocrypto, osilo, x509, threads
+  BuildDepends: core, cstruct, nocrypto, x509, threads
   Install: false
