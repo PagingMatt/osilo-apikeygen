@@ -1,0 +1,21 @@
+opam-version: "1.2"
+name: "osilo-apikeygen"
+version: "0.1"
+maintainer: "Matt Harrison <mah93@cam.ac.uk>"
+author: "Matt Harrison <mah93@cam.ac.uk>"
+homepage: "https://github.com/m-harrison/osilo-apikeygen"
+bug-reports: "https://github.com/m-harrison/osilo-apikeygen/issues/new"
+license: "ISC"
+dev-repo: "https://github.com/m-harrison/osilo-apikeygen"
+build: [make]
+install: [make "install"]
+remove: ["ocamlfind" "remove" "osilo-apikeygen"]
+depends: [
+  "core"
+  "cstruct"
+  "nocrypto"
+  "ocamlfind" {build}
+  "ocamlbuild" {build}
+  "x509"
+]
+available: [ocaml-version >= "4.02.3"]
