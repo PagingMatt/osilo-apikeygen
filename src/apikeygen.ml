@@ -50,7 +50,7 @@ let gen =
     ) (fun s c k () ->
         Nocrypto_entropy_unix.initialize ()
         |> fun () -> generate_api_key ~service:s ~cert:c ~key:k
-        |> Printf.printf "%s")
+        |> Printf.printf "Osilo service client API key:\n\n%s\n\n")
 
 let commands =
   Command.group
