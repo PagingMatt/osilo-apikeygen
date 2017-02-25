@@ -1,4 +1,5 @@
 open Core.Std
+open Osilo.Cryptography
 
 let read_file_to_cstruct ~f =
   let open Unix in
@@ -15,11 +16,23 @@ let rsa_private_key ~key =
     | `RSA prv -> prv
   end
 
-let cert ~cert =
+let x509_certificate ~cert =
   read_file_to_cstruct cert
   |> X509.Encoding.Pem.Certificate.of_pem_cstruct1
 
-let generate_api_key ~service ~cert ~key = ()
+let hostname hs =
+  match hs with
+  | h::[] -> h
+  | _     -> assert false
+
+let generate_api_key ~service ~cert ~key =
+  let open Nocrypto in
+  let private_key = rsa_private_key key   in
+  let certificate = x509_certificate cert in
+  let hs = X509.hostnames certificate     in
+  Signing.sign ~key:private_key (hostname hs |> Cstruct.of_string)
+  |> Serialisation.serialise_cstruct
+  |> Printf.printf "%s" 
 
 let gen =
   Command.basic
