@@ -25,7 +25,7 @@ let hostname hs =
   | h::[] -> h
   | _     -> assert false
 
-module Pss = Rsa.PSS (Nocrypto.Hash.SHA512)
+module Pss = Rsa.PSS (Nocrypto.Hash.SHA256)
 
 let generate_api_key ~service ~cert ~key =
   let open Nocrypto in
