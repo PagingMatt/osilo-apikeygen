@@ -1,0 +1,28 @@
+# OASIS_START
+# DO NOT EDIT (digest: 14e3dc9c9f7ccb8e79d358f3e97ac94f)
+# Ignore VCS directories, you can use the same kind of rule outside
+# OASIS_START/STOP if you want to exclude directories that contains
+# useless stuff for the build process
+true: annot, bin_annot
+<**/.svn>: -traverse
+<**/.svn>: not_hygienic
+".bzr": -traverse
+".bzr": not_hygienic
+".hg": -traverse
+".hg": not_hygienic
+".git": -traverse
+".git": not_hygienic
+"_darcs": -traverse
+"_darcs": not_hygienic
+# Executable osilo_apikeygen
+<src/apikeygen.{native,byte}>: pkg_core
+<src/apikeygen.{native,byte}>: pkg_cstruct
+<src/apikeygen.{native,byte}>: pkg_nocrypto.unix
+<src/apikeygen.{native,byte}>: pkg_threads
+<src/apikeygen.{native,byte}>: pkg_x509
+<src/*.ml{,i,y}>: pkg_core
+<src/*.ml{,i,y}>: pkg_cstruct
+<src/*.ml{,i,y}>: pkg_nocrypto.unix
+<src/*.ml{,i,y}>: pkg_threads
+<src/*.ml{,i,y}>: pkg_x509
+# OASIS_STOP

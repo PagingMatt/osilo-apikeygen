@@ -27,13 +27,13 @@ let hostname hs =
 
 module Pss = Rsa.PSS (Nocrypto.Hash.SHA256)
 
-let generate_api_key ~service ~cert ~key =
+let generate_api_key ~service ~port ~cert ~key =
   let open Nocrypto in
   let private_key = rsa_private_key key   in
   let certificate = x509_certificate cert in
   let hs = X509.hostnames certificate     in
   Pss.sign ~key:private_key
-    (Printf.sprintf "%s/%s" (hostname hs) service |> Cstruct.of_string)
+    (Printf.sprintf "%s,%s/%s" (hostname hs) port service |> Cstruct.of_string)
   |> Nocrypto.Base64.encode
   |> Cstruct.to_string
 
@@ -48,9 +48,11 @@ let gen =
         ~doc:"  Path to peer's x509 certificate."
       +> flag "-k" (required string)
         ~doc:"  Path to peer's private key file."
-    ) (fun s c k () ->
+      +> flag "-p" (required string)
+        ~doc:"  Port the peer will run on."
+    ) (fun s c k p () ->
         Nocrypto_entropy_unix.initialize ()
-        |> fun () -> generate_api_key ~service:s ~cert:c ~key:k
+        |> fun () -> generate_api_key ~service:s ~cert:c ~key:k ~port:p
         |> Printf.printf "Osilo service client API key:\n\n%s\n\n")
 
 let commands =
