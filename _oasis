@@ -1,6 +1,6 @@
 Name: osilo-apikeygen
 Version: 0.1
-Synopsis: Generate Osilo service client API keys  
+Synopsis: Generate Osilo service client API keys
 Authors: Matt Harrison <mah93@cam.ac.uk>
 License: ISC
 
@@ -11,9 +11,9 @@ OASISFormat: 0.4
 BuildTools: ocamlbuild
 Plugins: META (0.4), DevFiles (0.4)
 
-Executable osilo-apikeygen
+Executable osilo_apikeygen
   Path: src
   MainIs: apikeygen.ml
   CompiledObject: best
-  BuildDepends: core, cstruct, nocrypto, x509, threads
+  BuildDepends: core, cstruct, nocrypto.unix, x509, threads
   Install: false
